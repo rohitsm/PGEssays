@@ -3,11 +3,13 @@
  * Created by rohit on 1/29/14.
  */
 
-import org.jsoup.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class PGEssays {
@@ -15,41 +17,61 @@ public class PGEssays {
     static String link = "http://paulgraham.com/articles.html";
 
     public static void main(String args []) throws IOException{
-//        ParseHTML page = new ParseHTML();
+
+        int count = 0;
+        
         Document page = ParseHTML.getPageHTML(link);
         Elements font = ParseHTML.getPageContent(page);
         Elements url = font.select("a[href]");
 
-        //url contains a list of links
-
+        /* url contains a list of links */
         System.out.println("URL size = " + url.size());
-//        System.out.print("URL = " + url);
 
         for (Element first : url){
+            System.out.print("Post No: " + count);
             getBlogPost(first);
-            break;
+            count++;
         }
 
-//        String title = "<a href=\"ff.html\">Female Founders</a>";
-//        getBlogPost(title);
-
+        System.out.print("End Main");
     }
 
     public static void getBlogPost(Element title) throws IOException{
-        // Takes URL and returns the blog content
+
+        /* Takes URL and returns the blog content */
 
         String blogPostURL = "http://paulgraham.com/" + title.attr("href");
         String blogPostTitle = title.text();
-//        String blogPostDate =;
+        System.out.println("Title: " + blogPostTitle);
 
         Document blogPage = ParseHTML.getPageHTML(blogPostURL);
-        Elements font = ParseHTML.getPageContent(blogPage);
-        System.out.println("Font: \n\n" + font.first().text());
-//        System.out.println("Font: \n\n" + font.parse)
+        blogPage.select("br").append("\\n");
+        String blogPost = blogPage.text().replace("\\n", "\n");
+        writeToFile(blogPostTitle, blogPost);
 
-        String text = Jsoup.parse(html.replaceAll("(?i)<br[^>]*>", "br2n")).text();
-        text = descrizione.replaceAll("br2n", "\n");
+        System.out.println("Done getBlogPost");
 
     }
-}
 
+    public static void writeToFile(String blogPostTitle, String blogPost){
+
+        String fileName = blogPostTitle;
+        try{
+            File file = new File("content/"+fileName+".txt");
+
+            /* If file doesn't exist, then create it */
+            if(!file.exists()){
+                file.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(blogPost);
+            bw.close();
+
+        }catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+}

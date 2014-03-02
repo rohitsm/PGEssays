@@ -16,7 +16,7 @@ public class ParseHTML {
 
     public static Document getPageHTML(String link) throws IOException{
         System.out.println("Link = " + link);
-        Document doc = Jsoup.connect(link).get();
+        Document doc = Jsoup.connect(link).timeout(10*1000).get();
         return doc;
     }
 
