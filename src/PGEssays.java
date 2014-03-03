@@ -19,7 +19,7 @@ public class PGEssays {
     public static void main(String args []) throws IOException{
 
         int count = 0;
-        
+
         Document page = ParseHTML.getPageHTML(link);
         Elements font = ParseHTML.getPageContent(page);
         Elements url = font.select("a[href]");
@@ -42,14 +42,19 @@ public class PGEssays {
 
         String blogPostURL = "http://paulgraham.com/" + title.attr("href");
         String blogPostTitle = title.text();
-        System.out.println("Title: " + blogPostTitle);
+        System.out.println(" Title: " + blogPostTitle);
 
-        Document blogPage = ParseHTML.getPageHTML(blogPostURL);
-        blogPage.select("br").append("\\n");
-        String blogPost = blogPage.text().replace("\\n", "\n");
-        writeToFile(blogPostTitle, blogPost);
+        try{
+            Document blogPage = ParseHTML.getPageHTML(blogPostURL);
+            blogPage.select("br").append("\\n");
+            String blogPost = blogPage.text().replace("\\n", "\n");
+            writeToFile(blogPostTitle, blogPost);
 
-        System.out.println("Done getBlogPost");
+            System.out.println("Done getBlogPost");
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
 
     }
 
