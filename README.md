@@ -3,7 +3,7 @@ As a regular reader of [Paul Graham's](http://paulgraham.com) essays, I wanted t
 
 As of writing this (3 March 2014), there were a total of 155 posts that were collected.
 
-#External LLibraries used:
+#External Libraries used:
 
 JSoup - HTML parser that was used extensively in this project. 
 
